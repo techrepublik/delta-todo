@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>ToDo List</h1>
+<div class="col-md-12">
+    <!-- seach -->
+    <form method="get" action="{% url 'todo_list' %}" class="mb-4 d-flex align-items-center">
+        <div class="d-flex">
+            <input type="text" name="search" placeholder="Search todos" class="form-control col-xs-3 me-2" value="{{ query }}">
+            <button type="submit" class="btn btn-primary">Search</button>
+        </div>
+        <a class="btn btn-primary ms-auto" href="{% url 'todo_create' %}">Add ToDo</a>
+    </form>
+</div>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Completed</th>
+            <th>Created on</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for todo in todos %}
+        <tr class="{% if todo.completed %}text-body-success {% else %}table-secondary{% endif %} ">
+            <td>{{ todo.title }}</td>
+            <td>{{ todo.description }}</td>
+            <td>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" role="switch" {% if todo.completed %}checked {% else %}{% endif %} disabled>
+                </div>
+            </td>
+            <td>{{ todo.created_at|date:"Y-m-d" }}</td>
+            <td>
+                <a href="{% url 'todo_update' todo.pk %}" class="btn btn-warning">Edit</a>
+                <a href="{% url 'todo_delete' todo.pk %}" class="btn btn-danger">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
